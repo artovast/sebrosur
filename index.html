@@ -447,6 +447,22 @@
         '<div class="state-sub">' + esc(msg) + '</div>' +
       '</div>';
   }
+
+  // =============================================
+  // SERVICE WORKER — PWA
+  // =============================================
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker
+        .register('/sebrosur/serviceworker.js')
+        .then(function(reg) {
+          console.log('Service Worker terdaftar:', reg.scope);
+        })
+        .catch(function(err) {
+          console.log('Service Worker gagal:', err);
+        });
+    });
+  }
 </script>
 </body>
 </html>
