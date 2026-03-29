@@ -265,7 +265,14 @@
   var FILTER    = 'Semua';
 
   // Ambil driver_id dari URL parameter
-  var DRIVER_ID = new URLSearchParams(window.location.search).get('d') || '';
+  // var DRIVER_ID = new URLSearchParams(window.location.search).get('d') || ''; // ini salah, saat jadi app, akses ditolak
+  // Ambil driver_id dari URL parameter
+  // Jika ada, simpan ke localStorage untuk akses berikutnya
+  var paramId = new URLSearchParams(window.location.search).get('d') || '';
+  if (paramId) {
+    localStorage.setItem('sebrosur_driver_id', paramId);
+  }
+  var DRIVER_ID = paramId || localStorage.getItem('sebrosur_driver_id') || '';
 
   // =============================================
   // INIT — fetch data dari Apps Script
