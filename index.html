@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1D9E75">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#1D9E75">
+  <meta name="apple-mobile-web-app-title" content="SeBrosur">
+  <link rel="manifest" href="manifest.json">
+  <title>SeBrosur</title>
+  <style>
+    :root {
+      --hijau: #1D9E75;
+      --hijau-gelap: #0F6E56;
+      --hijau-muda: #E1F5EE;
+      --teks: #1a1a1a;
+      --abu: #666;
+      --redup: #aaa;
+      --border: #eee;
+      --bg: #f2f2f2;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0;
+        -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont,
+                   'Segoe UI', Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--teks);
+      font-size: 16px;
+      overflow-x: hidden;
+    }
+
+    /* TOPBAR */
+    .topbar {
+      background: var(--hijau);
+      padding: 18px 18px;
+      padding-top: max(18px, env(safe-area-inset-top));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand { font-size: 24px; font-weight: 800; color: #fff; }
+    .driver-name { font-size: 15px; font-weight: 600; color: #fff; text-align:right; }
+    .driver-id { font-size: 12px; color: rgba(255,255,255,.7); text-align:right; margin-top:2px; }
+
+    /* STATE */
+    .state-screen {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 75vh; padding: 40px 24px; text-align: center; gap: 16px;
+    }
+    .state-icon { font-size: 72px; }
+    .state-title { font-size: 22px; font-weight: 700; }
+    .state-sub { font-size: 16px; color: var(--abu); line-height: 1.6; }
+
+    /* GREETING */
+    .greeting {
+      padding: 18px 18px 10px;
+      font-size: 16px; color: var(--abu); line-height: 1.5;
+    }
+    .greeting strong { color: var(--teks); }
+
+    /* FILTER */
+    .filter-wrap {
+      overflow-x: auto; scrollbar-width: none;
+      padding: 10px 0 14px;
+    }
+    .filter-wrap::-webkit-scrollbar { display: none; }
+    .filter-row {
+      display: flex; gap: 10px;
+      padding: 0 18px; width: max-content;
+    }
+    .chip {
+      padding: 12px 22px; border-radius: 50px;
+      font-size: 15px; font-weight: 500;
+      border: 2px solid #ddd; color: var(--abu);
+      background: #fff; cursor: pointer;
+      white-space: nowrap; min-height: 48px;
+      display: flex; align-items: center;
+      transition: all .15s;
+    }
+    .chip.active {
+      background: var(--hijau); border-color: var(--hijau);
+      color: #fff; font-weight: 700;
+    }
+
+    /* LABEL */
+    .section-label {
+      padding: 4px 18px 12px;
+      font-size: 14px; color: var(--redup);
+    }
+
+    /* CARDS */
+    .cards {
+      display: flex; flex-direction: column;
+      gap: 14px; padding: 0 18px 130px;
+    }
+    .card {
+      background: #fff; border-radius: 18px;
+      overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    }
+    .card-preview {
+      height: 110px; background: #e8e8e8;
+      display: flex; align-items: center;
+      justify-content: center; position: relative;
+    }
+    .card-preview-label { font-size: 14px; color: #ccc; }
+    .badge {
+      position: absolute; top: 12px; left: 12px;
+      font-size: 12px; padding: 5px 12px;
+      border-radius: 12px; font-weight: 700;
+    }
+    .badge-new { background: var(--hijau-muda); color: var(--hijau-gelap); }
+
+    .card-body { padding: 18px; }
+    .card-title {
+      font-size: 19px; font-weight: 700;
+      color: var(--teks); margin-bottom: 8px; line-height: 1.3;
+    }
+    .card-desc {
+      font-size: 15px; color: var(--abu);
+      margin-bottom: 12px; line-height: 1.5;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .card-tags {
+      display: flex; gap: 8px;
+      flex-wrap: wrap; margin-bottom: 16px;
+    }
+    .tag {
+      font-size: 13px; padding: 5px 12px;
+      border-radius: 8px; background: var(--bg); color: var(--abu);
+    }
+    .card-footer {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 12px;
+    }
+    .fee-label { font-size: 13px; color: var(--redup); margin-bottom: 3px; }
+    .fee-amount {
+      font-size: 22px; font-weight: 800; color: var(--hijau-gelap);
+    }
+
+    /* TOMBOL */
+    .btn {
+      min-height: 54px; min-width: 140px;
+      padding: 14px 20px; border-radius: 14px;
+      font-size: 16px; font-weight: 700;
+      border: none; cursor: pointer;
+      text-align: center; white-space: nowrap; flex-shrink: 0;
+      transition: all .15s;
+    }
+    .btn-ambil { background: var(--hijau); color: #fff; }
+    .btn-ambil:active { background: var(--hijau-gelap); transform: scale(.98); }
+    .btn-taken {
+      background: var(--bg); color: var(--redup);
+      font-size: 14px; font-weight: 500;
+    }
+    .btn-loading { background: var(--bg); color: #bbb; }
+
+    /* FAB BAR */
+    .fab-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: #fff; border-top: 1px solid var(--border);
+      padding: 16px 20px;
+      padding-bottom: max(16px, env(safe-area-inset-bottom));
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .fab-label { font-size: 15px; color: var(--abu); }
+    .fab-link {
+      font-size: 16px; font-weight: 700; color: var(--hijau);
+      text-decoration: none; min-height: 48px;
+      display: flex; align-items: center;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed; bottom: 100px; left: 18px; right: 18px;
+      background: rgba(26,26,26,.93); color: #fff;
+      padding: 16px 20px; border-radius: 16px;
+      font-size: 16px; opacity: 0; transition: opacity .3s;
+      pointer-events: none; text-align: center; line-height: 1.4;
+    }
+    .toast.show { opacity: 1; }
+
+    .empty {
+      text-align: center; padding: 48px 24px;
+      font-size: 16px; color: var(--redup); line-height: 1.6;
+    }
+
+    /* SKELETON LOADING */
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.2s infinite;
+      border-radius: 8px;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .skeleton-card {
+      background: #fff; border-radius: 18px;
+      overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    }
+    .sk-preview { height: 110px; }
+    .sk-body { padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+    .sk-title { height: 22px; width: 70%; }
+    .sk-desc { height: 16px; width: 100%; }
+    .sk-desc2 { height: 16px; width: 60%; }
+    .sk-footer { height: 54px; width: 100%; margin-top: 4px; border-radius: 14px; }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <div class="topbar">
+    <div class="brand">SeBrosur</div>
+  </div>
+  <!-- Skeleton loading — muncul instan sebelum data masuk -->
+  <div style="padding: 16px 18px 0">
+    <div style="height:16px;width:60%;background:#ddd;border-radius:8px;margin-bottom:20px"></div>
+  </div>
+  <div class="cards">
+    <div class="skeleton-card">
+      <div class="skeleton sk-preview"></div>
+      <div class="sk-body">
+        <div class="skeleton sk-title"></div>
+        <div class="skeleton sk-desc"></div>
+        <div class="skeleton sk-desc2"></div>
+        <div class="skeleton sk-footer"></div>
+      </div>
+    </div>
+    <div class="skeleton-card">
+      <div class="skeleton sk-preview"></div>
+      <div class="sk-body">
+        <div class="skeleton sk-title"></div>
+        <div class="skeleton sk-desc"></div>
+        <div class="skeleton sk-desc2"></div>
+        <div class="skeleton sk-footer"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // =============================================
+  // KONFIGURASI — ganti dengan URL Apps Script kamu
+  // =============================================
+  var APPS_SCRIPT_URL = 'GANTI_DENGAN_URL_DEPLOYMENT_APPS_SCRIPT';
+
+  // =============================================
+  // STATE
+  // =============================================
+  var DRIVER    = null;
+  var BROSUR    = [];
+  var TAKEN     = [];
+  var FILTER    = 'Semua';
+
+  // Ambil driver_id dari URL parameter
+  var DRIVER_ID = new URLSearchParams(window.location.search).get('d') || '';
+
+  // =============================================
+  // INIT — fetch data dari Apps Script
+  // =============================================
+  fetchPost({ action: 'getKatalog', driverId: DRIVER_ID })
+    .then(onDataLoaded)
+    .catch(function(err) {
+      showErrorScreen('Gagal terhubung ke server. Coba lagi nanti.');
+    });
+
+  function fetchPost(data) {
+    return fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'text/plain' }
+    }).then(function(r) { return r.json(); });
+  }
+
+  // =============================================
+  // CALLBACKS
+  // =============================================
+  function onDataLoaded(data) {
+    if (data.error)              { showErrorScreen(data.error); return; }
+    if (data.status === 'pending') { showPendingScreen(data.nama); return; }
+    DRIVER = data.driver;
+    BROSUR = data.brosur;
+    TAKEN  = data.taken;
+    renderKatalog();
+  }
+
+  // =============================================
+  // RENDER
+  // =============================================
+  function renderKatalog() {
+    var kategoriList = ['Semua'];
+    BROSUR.forEach(function(b) {
+      if (kategoriList.indexOf(b.kategori) === -1) kategoriList.push(b.kategori);
+    });
+    var filtered = FILTER === 'Semua'
+      ? BROSUR
+      : BROSUR.filter(function(b) { return b.kategori === FILTER; });
+
+    document.getElementById('app').innerHTML =
+      '<div class="topbar">' +
+        '<div class="brand">SeBrosur</div>' +
+        '<div>' +
+          '<div class="driver-name">' + esc(DRIVER.nama) + '</div>' +
+          '<div class="driver-id">' + esc(DRIVER.id) + ' · ' + esc(DRIVER.platform) + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="greeting">Halo <strong>' +
+        esc(DRIVER.nama.split(' ')[0]) +
+      '</strong>, pilih brosur yang cocok dengan situasi lapangan hari ini.</div>' +
+      '<div class="filter-wrap"><div class="filter-row">' +
+        kategoriList.map(function(k) {
+          return '<div class="chip' + (k === FILTER ? ' active' : '') +
+            '" onclick="setFilter(\'' + k + '\')">' + esc(k) + '</div>';
+        }).join('') +
+      '</div></div>' +
+      '<div class="section-label">' + filtered.length + ' brosur tersedia</div>' +
+      '<div class="cards">' +
+        (filtered.length
+          ? filtered.map(renderCard).join('')
+          : '<div class="empty">Tidak ada brosur di kategori ini.</div>') +
+      '</div>' +
+      '<div class="fab-bar">' +
+        '<span class="fab-label">E-brosur saya</span>' +
+        '<a class="fab-link" href="' + esc(DRIVER.folderUrl) +
+          '" target="_blank">Buka folder Drive →</a>' +
+      '</div>';
+  }
+
+  function renderCard(b) {
+    var taken = TAKEN.indexOf(b.kodeReferral) !== -1;
+    var btn = taken
+      ? '<button class="btn btn-taken">Sudah diambil</button>'
+      : '<button class="btn btn-ambil" id="btn-' + b.id +
+          '" onclick="ambilBrosur(\'' + b.id + '\',\'' +
+          b.nama.replace(/'/g, "\\'") + '\')">Ambil brosur</button>';
+
+    return '<div class="card">' +
+      '<div class="card-preview">' +
+        '<span class="card-preview-label">preview brosur</span>' +
+        (b.isNew ? '<span class="badge badge-new">Baru</span>' : '') +
+      '</div>' +
+      '<div class="card-body">' +
+        '<div class="card-title">' + esc(b.nama) + '</div>' +
+        '<div class="card-desc">' + esc(b.deskripsi) + '</div>' +
+        '<div class="card-tags">' +
+          '<span class="tag">' + esc(b.kategori) + '</span>' +
+          '<span class="tag">' + esc(b.segmen) + '</span>' +
+        '</div>' +
+        '<div class="card-footer">' +
+          '<div>' +
+            '<div class="fee-label">Fee closing</div>' +
+            '<div class="fee-amount">Rp' +
+              Number(b.feeClosing).toLocaleString('id-ID') +
+            '</div>' +
+          '</div>' +
+          btn +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  // =============================================
+  // ACTIONS
+  // =============================================
+  function setFilter(k) { FILTER = k; renderKatalog(); }
+
+  function ambilBrosur(brosurId, namaBrosur) {
+    var btn = document.getElementById('btn-' + brosurId);
+    if (!btn) return;
+    btn.textContent = 'Memproses...';
+    btn.className   = 'btn btn-loading';
+    btn.disabled    = true;
+
+    fetchPost({ action: 'ambilBrosur', driverId: DRIVER_ID, brosurId: brosurId })
+      .then(function(result) {
+        if (result.success) {
+          TAKEN.push(result.kodeReferral);
+          showToast('E-brosur siap di folder Drive kamu');
+          renderKatalog();
+        } else {
+          resetBtn(brosurId);
+          showToast('Gagal: ' + (result.message || 'coba lagi'));
+        }
+      })
+      .catch(function() {
+        resetBtn(brosurId);
+        showToast('Terjadi kesalahan, coba lagi');
+      });
+  }
+
+  function resetBtn(id) {
+    var b = document.getElementById('btn-' + id);
+    if (b) {
+      b.textContent = 'Ambil brosur';
+      b.className   = 'btn btn-ambil';
+      b.disabled    = false;
+    }
+  }
+
+  // =============================================
+  // UTILS
+  // =============================================
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 3500);
+  }
+
+  function esc(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function showPendingScreen(nama) {
+    document.getElementById('app').innerHTML =
+      '<div class="topbar"><div class="brand">SeBrosur</div></div>' +
+      '<div class="state-screen">' +
+        '<div class="state-icon">⏳</div>' +
+        '<div class="state-title">Halo ' + esc(nama) + ',</div>' +
+        '<div class="state-sub">Akun kamu sedang dalam proses verifikasi.<br>' +
+        'Kami akan menghubungi kamu via WhatsApp setelah akun aktif.</div>' +
+      '</div>';
+  }
+
+  function showErrorScreen(msg) {
+    document.getElementById('app').innerHTML =
+      '<div class="topbar"><div class="brand">SeBrosur</div></div>' +
+      '<div class="state-screen">' +
+        '<div class="state-icon">🚫</div>' +
+        '<div class="state-title">Akses ditolak</div>' +
+        '<div class="state-sub">' + esc(msg) + '</div>' +
+      '</div>';
+  }
+</script>
+</body>
+</html>
