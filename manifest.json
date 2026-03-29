@@ -1,0 +1,35 @@
+{
+  "name": "SeBrosur",
+  "short_name": "SeBrosur",
+  "description": "Katalog brosur untuk driver SeBrosur",
+  "start_url": "/sebrosur-app/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1D9E75",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+```
+
+---
+
+**Setelah dua file tersimpan di GitHub:**
+
+Isi `APPS_SCRIPT_URL` di `index.html` dengan URL deployment Apps Script kamu.
+
+Ganti `start_url` di `manifest.json` dengan `/nama-repository-kamu/` sesuai nama repo yang kamu buat.
+
+URL GitHub Pages-nya nanti:
+```
+https://[username].github.io/sebrosur-app/?d=DRV-001
