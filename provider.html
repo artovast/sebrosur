@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1D9E75">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="SeBrosur Provider">
+  <link rel="manifest" href="manifest-provider.json">
+  <title>SeBrosur — Provider</title>
+  <style>
+    :root {
+      --hijau: #1D9E75;
+      --hijau-gelap: #0F6E56;
+      --hijau-muda: #E1F5EE;
+      --teks: #1a1a1a;
+      --abu: #666;
+      --redup: #aaa;
+      --border: #eee;
+      --bg: #f2f2f2;
+      --kuning: #FAEEDA;
+      --kuning-teks: #854F0B;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0;
+        -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont,
+                   'Segoe UI', Roboto, Arial, sans-serif;
+      background: var(--bg); color: var(--teks);
+      font-size: 16px; overflow-x: hidden;
+    }
+
+    /* TOPBAR */
+    .topbar {
+      background: var(--hijau);
+      padding: 18px;
+      padding-top: max(18px, env(safe-area-inset-top));
+      display: flex; align-items: center;
+      justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .brand { font-size: 22px; font-weight: 800; color: #fff; }
+    .topbar-sub { font-size: 13px; color: rgba(255,255,255,.75); margin-top: 2px; }
+
+    /* LOGIN SCREEN */
+    .login-screen {
+      padding: 40px 24px; display: flex;
+      flex-direction: column; gap: 16px;
+    }
+    .login-title {
+      font-size: 22px; font-weight: 700; margin-bottom: 4px;
+    }
+    .login-sub { font-size: 15px; color: var(--abu); line-height: 1.5; }
+    .input-group { display: flex; flex-direction: column; gap: 6px; }
+    .input-label { font-size: 14px; font-weight: 500; color: var(--teks); }
+    .input {
+      height: 52px; border-radius: 12px;
+      border: 2px solid var(--border); padding: 0 16px;
+      font-size: 16px; color: var(--teks);
+      background: #fff; width: 100%;
+      transition: border-color .15s;
+    }
+    .input:focus { outline: none; border-color: var(--hijau); }
+    .btn-login {
+      height: 54px; border-radius: 14px;
+      background: var(--hijau); color: #fff;
+      font-size: 17px; font-weight: 700;
+      border: none; cursor: pointer; width: 100%;
+      transition: all .15s; margin-top: 8px;
+    }
+    .btn-login:active { background: var(--hijau-gelap); }
+    .btn-login:disabled { opacity: .6; cursor: not-allowed; }
+    .login-error {
+      font-size: 14px; color: #E24B4A;
+      background: #FCEBEB; padding: 12px 16px;
+      border-radius: 10px; display: none;
+    }
+    .login-error.show { display: block; }
+
+    /* STATE */
+    .state-screen {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 70vh; padding: 40px 24px;
+      text-align: center; gap: 16px;
+    }
+    .state-icon { font-size: 72px; }
+    .state-title { font-size: 22px; font-weight: 700; }
+    .state-sub { font-size: 16px; color: var(--abu); line-height: 1.6; }
+
+    /* DASHBOARD */
+    .dash-content { padding: 0 0 100px; }
+
+    /* SALDO CARD */
+    .saldo-card {
+      background: var(--hijau-gelap);
+      margin: 16px; border-radius: 20px;
+      padding: 24px; color: #fff;
+    }
+    .saldo-label { font-size: 14px; color: rgba(255,255,255,.75); margin-bottom: 6px; }
+    .saldo-amount { font-size: 36px; font-weight: 800; letter-spacing: -.5px; }
+    .saldo-row {
+      display: flex; gap: 16px; margin-top: 20px;
+    }
+    .saldo-item { flex: 1; }
+    .saldo-item-label {
+      font-size: 12px; color: rgba(255,255,255,.65); margin-bottom: 4px;
+    }
+    .saldo-item-val { font-size: 16px; font-weight: 700; }
+
+    /* SECTION */
+    .section-head {
+      padding: 20px 16px 10px;
+      font-size: 17px; font-weight: 700; color: var(--teks);
+    }
+
+    /* STATS ROW */
+    .stats-row {
+      display: flex; gap: 10px; padding: 0 16px 4px;
+    }
+    .stat-box {
+      flex: 1; background: #fff; border-radius: 14px;
+      padding: 14px 12px; text-align: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .stat-val {
+      font-size: 26px; font-weight: 800;
+      color: var(--hijau-gelap); line-height: 1;
+    }
+    .stat-label {
+      font-size: 12px; color: var(--abu); margin-top: 6px;
+    }
+
+    /* BROSUR LIST */
+    .brosur-cards {
+      display: flex; flex-direction: column;
+      gap: 10px; padding: 0 16px;
+    }
+    .brosur-card {
+      background: #fff; border-radius: 14px;
+      padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .brosur-head {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 12px; margin-bottom: 12px;
+    }
+    .brosur-nama { font-size: 16px; font-weight: 600; line-height: 1.3; }
+    .status-pill {
+      flex-shrink: 0; font-size: 11px; font-weight: 700;
+      padding: 4px 10px; border-radius: 10px;
+    }
+    .status-aktif { background: var(--hijau-muda); color: var(--hijau-gelap); }
+    .status-draft { background: var(--kuning); color: var(--kuning-teks); }
+    .status-nonaktif { background: #f2f2f2; color: var(--redup); }
+    .brosur-stats {
+      display: flex; gap: 0;
+      border-top: 1px solid var(--border); padding-top: 12px;
+    }
+    .bstat {
+      flex: 1; text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .bstat:last-child { border-right: none; }
+    .bstat-val { font-size: 20px; font-weight: 800; color: var(--teks); }
+    .bstat-label { font-size: 11px; color: var(--redup); margin-top: 3px; }
+
+    /* EMPTY */
+    .empty {
+      text-align: center; padding: 32px 24px;
+      font-size: 15px; color: var(--redup); line-height: 1.6;
+    }
+
+    /* FAB BAR */
+    .fab-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: #fff; border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .fab-greeting { font-size: 13px; color: var(--abu); }
+    .fab-greeting strong { color: var(--teks); display: block; font-size: 15px; }
+    .btn-logout {
+      padding: 10px 18px; border-radius: 10px;
+      font-size: 14px; font-weight: 600;
+      border: 1.5px solid var(--border);
+      color: var(--abu); background: #fff; cursor: pointer;
+      min-height: 44px;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed; bottom: 90px; left: 18px; right: 18px;
+      background: rgba(26,26,26,.93); color: #fff;
+      padding: 16px 20px; border-radius: 16px;
+      font-size: 16px; opacity: 0; transition: opacity .3s;
+      pointer-events: none; text-align: center; line-height: 1.4;
+    }
+    .toast.show { opacity: 1; }
+
+    /* SKELETON */
+    .skeleton {
+      background: linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.2s infinite;
+      border-radius: 8px;
+    }
+    @keyframes shimmer {
+      0%{background-position:200% 0} 100%{background-position:-200% 0}
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <div class="topbar">
+    <div>
+      <div class="brand">SeBrosur</div>
+      <div class="topbar-sub">Portal Provider</div>
+    </div>
+  </div>
+  <div class="state-screen">
+    <div class="state-icon">⏳</div>
+    <div class="state-title">Memuat...</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  var APPS_SCRIPT_URL = 'GANTI_DENGAN_URL_DEPLOYMENT_APPS_SCRIPT';
+
+  var PROVIDER    = null;
+  var PROVIDER_ID = '';
+
+  // =============================================
+  // INIT
+  // =============================================
+  window.addEventListener('load', function() {
+    // Cek apakah sudah login sebelumnya
+    var saved = localStorage.getItem('sebrosur_provider');
+    if (saved) {
+      try {
+        var data = JSON.parse(saved);
+        PROVIDER_ID = data.id;
+        PROVIDER    = data;
+        showDashboardShell();
+        loadDashboardData();
+      } catch(err) {
+        localStorage.removeItem('sebrosur_provider');
+        showLoginScreen();
+      }
+    } else {
+      showLoginScreen();
+    }
+  });
+
+  // =============================================
+  // LOGIN
+  // =============================================
+  function showLoginScreen() {
+    document.getElementById('app').innerHTML =
+      '<div class="topbar">' +
+        '<div><div class="brand">SeBrosur</div>' +
+        '<div class="topbar-sub">Portal Provider</div></div>' +
+      '</div>' +
+      '<div class="login-screen">' +
+        '<div>' +
+          '<div class="login-title">Masuk ke akun provider</div>' +
+          '<div class="login-sub">Gunakan ID Provider dan nomor WhatsApp yang didaftarkan.</div>' +
+        '</div>' +
+        '<div class="login-error" id="login-error"></div>' +
+        '<div class="input-group">' +
+          '<div class="input-label">ID Provider</div>' +
+          '<input class="input" id="input-id" type="text" ' +
+            'placeholder="contoh: PROV-001" autocomplete="off" ' +
+            'autocapitalize="characters">' +
+        '</div>' +
+        '<div class="input-group">' +
+          '<div class="input-label">Nomor WhatsApp</div>' +
+          '<input class="input" id="input-wa" type="tel" ' +
+            'placeholder="contoh: 08123456789">' +
+        '</div>' +
+        '<button class="btn-login" id="btn-login" onclick="doLogin()">Masuk</button>' +
+      '</div>';
+  }
+
+  function doLogin() {
+    var id = document.getElementById('input-id').value.trim().toUpperCase();
+    var wa = document.getElementById('input-wa').value.trim();
+    var btn = document.getElementById('btn-login');
+    var err = document.getElementById('login-error');
+
+    if (!id || !wa) {
+      showLoginError('ID Provider dan nomor WA harus diisi.');
+      return;
+    }
+
+    btn.textContent = 'Memeriksa...';
+    btn.disabled    = true;
+    err.classList.remove('show');
+
+    fetchPost({ action: 'loginProvider', providerId: id, wa: wa })
+      .then(function(data) {
+        if (data.error) {
+          showLoginError(data.error);
+          btn.textContent = 'Masuk';
+          btn.disabled    = false;
+          return;
+        }
+        if (data.status === 'pending') {
+          showLoginError('Akun sedang diverifikasi. Hubungi admin SeBrosur.');
+          btn.textContent = 'Masuk';
+          btn.disabled    = false;
+          return;
+        }
+        // Login berhasil
+        PROVIDER    = data.provider;
+        PROVIDER_ID = data.provider.id;
+        localStorage.setItem('sebrosur_provider', JSON.stringify(data.provider));
+        showDashboardShell();
+        loadDashboardData();
+      })
+      .catch(function() {
+        showLoginError('Gagal terhubung. Coba lagi.');
+        btn.textContent = 'Masuk';
+        btn.disabled    = false;
+      });
+  }
+
+  function showLoginError(msg) {
+    var el = document.getElementById('login-error');
+    if (el) { el.textContent = msg; el.classList.add('show'); }
+  }
+
+  // =============================================
+  // DASHBOARD SHELL — muncul instan sebelum data
+  // =============================================
+  function showDashboardShell() {
+    document.getElementById('app').innerHTML =
+      '<div class="topbar">' +
+        '<div><div class="brand">SeBrosur</div>' +
+        '<div class="topbar-sub">Portal Provider</div></div>' +
+      '</div>' +
+      '<div class="dash-content">' +
+        // Skeleton saldo card
+        '<div style="margin:16px;border-radius:20px;height:160px;' +
+          'background:linear-gradient(90deg,#0d7a52 25%,#0a6644 50%,#0d7a52 75%);' +
+          'background-size:200% 100%;animation:shimmer 1.2s infinite"></div>' +
+        // Skeleton stats
+        '<div class="stats-row">' +
+          '<div class="stat-box"><div class="skeleton" style="height:26px;width:50%;margin:0 auto 6px"></div>' +
+            '<div class="skeleton" style="height:12px;width:70%;margin:0 auto"></div></div>' +
+          '<div class="stat-box"><div class="skeleton" style="height:26px;width:50%;margin:0 auto 6px"></div>' +
+            '<div class="skeleton" style="height:12px;width:70%;margin:0 auto"></div></div>' +
+          '<div class="stat-box"><div class="skeleton" style="height:26px;width:50%;margin:0 auto 6px"></div>' +
+            '<div class="skeleton" style="height:12px;width:70%;margin:0 auto"></div></div>' +
+        '</div>' +
+        '<div class="section-head">Brosur saya</div>' +
+        '<div class="brosur-cards">' +
+          '<div style="background:#fff;border-radius:14px;padding:16px">' +
+            '<div class="skeleton" style="height:18px;width:60%;margin-bottom:10px"></div>' +
+            '<div class="skeleton" style="height:14px;width:40%"></div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="fab-bar">' +
+        '<div class="fab-greeting">' +
+          '<strong>' + esc(PROVIDER ? PROVIDER.nama : '') + '</strong>' +
+          'Portal Provider' +
+        '</div>' +
+        '<button class="btn-logout" onclick="doLogout()">Keluar</button>' +
+      '</div>';
+  }
+
+  // =============================================
+  // LOAD DATA
+  // =============================================
+  function loadDashboardData() {
+    fetchPost({ action: 'getDashboardProvider', providerId: PROVIDER_ID })
+      .then(function(data) {
+        if (data.error) { showToast(data.error); return; }
+        PROVIDER = data.provider;
+        // Update cache
+        localStorage.setItem('sebrosur_provider', JSON.stringify(data.provider));
+        renderDashboard(data);
+      })
+      .catch(function() {
+        showToast('Gagal memuat data. Tarik ke bawah untuk refresh.');
+      });
+  }
+
+  // =============================================
+  // RENDER DASHBOARD
+  // =============================================
+  function renderDashboard(data) {
+    var p = data.provider;
+    var brosurList = data.brosur || [];
+
+    // Hitung total stats
+    var totalDist    = 0, totalLead = 0, totalClosing = 0;
+    brosurList.forEach(function(b) {
+      totalDist    += b.distribusi || 0;
+      totalLead    += b.lead       || 0;
+      totalClosing += b.closing    || 0;
+    });
+
+    var brosurHtml = brosurList.length
+      ? brosurList.map(renderBrosurCard).join('')
+      : '<div class="empty">Belum ada brosur aktif.<br>Upload brosur pertamamu via form pendaftaran.</div>';
+
+    document.getElementById('app').innerHTML =
+      '<div class="topbar">' +
+        '<div><div class="brand">SeBrosur</div>' +
+        '<div class="topbar-sub">Portal Provider</div></div>' +
+      '</div>' +
+      '<div class="dash-content">' +
+
+        // SALDO CARD
+        '<div class="saldo-card">' +
+          '<div class="saldo-label">Saldo aktif</div>' +
+          '<div class="saldo-amount">Rp' +
+            Number(p.saldo).toLocaleString('id-ID') +
+          '</div>' +
+          '<div class="saldo-row">' +
+            '<div class="saldo-item">' +
+              '<div class="saldo-item-label">Total topup</div>' +
+              '<div class="saldo-item-val">Rp' +
+                Number(p.totalTopup).toLocaleString('id-ID') +
+              '</div>' +
+            '</div>' +
+            '<div class="saldo-item">' +
+              '<div class="saldo-item-label">Terpakai</div>' +
+              '<div class="saldo-item-val">Rp' +
+                Number(p.totalPakai).toLocaleString('id-ID') +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+        // STATS TOTAL
+        '<div class="section-head">Performa keseluruhan</div>' +
+        '<div class="stats-row">' +
+          '<div class="stat-box">' +
+            '<div class="stat-val">' + totalDist + '</div>' +
+            '<div class="stat-label">Distribusi</div>' +
+          '</div>' +
+          '<div class="stat-box">' +
+            '<div class="stat-val">' + totalLead + '</div>' +
+            '<div class="stat-label">Lead</div>' +
+          '</div>' +
+          '<div class="stat-box">' +
+            '<div class="stat-val">' + totalClosing + '</div>' +
+            '<div class="stat-label">Closing</div>' +
+          '</div>' +
+        '</div>' +
+
+        // BROSUR LIST
+        '<div class="section-head">Performa per brosur</div>' +
+        '<div class="brosur-cards">' + brosurHtml + '</div>' +
+
+      '</div>' +
+
+      // FAB BAR
+      '<div class="fab-bar">' +
+        '<div class="fab-greeting">' +
+          '<strong>' + esc(p.nama) + '</strong>' +
+          esc(p.kategori) +
+        '</div>' +
+        '<button class="btn-logout" onclick="doLogout()">Keluar</button>' +
+      '</div>';
+  }
+
+  function renderBrosurCard(b) {
+    var statusClass = 'status-' + (b.status || 'draft');
+    var statusLabel = b.status === 'aktif' ? 'Aktif'
+      : b.status === 'nonaktif' ? 'Nonaktif' : 'Draft';
+
+    return '<div class="brosur-card">' +
+      '<div class="brosur-head">' +
+        '<div class="brosur-nama">' + esc(b.nama) + '</div>' +
+        '<span class="status-pill ' + statusClass + '">' + statusLabel + '</span>' +
+      '</div>' +
+      '<div class="brosur-stats">' +
+        '<div class="bstat">' +
+          '<div class="bstat-val">' + (b.distribusi || 0) + '</div>' +
+          '<div class="bstat-label">Distribusi</div>' +
+        '</div>' +
+        '<div class="bstat">' +
+          '<div class="bstat-val">' + (b.lead || 0) + '</div>' +
+          '<div class="bstat-label">Lead</div>' +
+        '</div>' +
+        '<div class="bstat">' +
+          '<div class="bstat-val">' + (b.closing || 0) + '</div>' +
+          '<div class="bstat-label">Closing</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  // =============================================
+  // LOGOUT
+  // =============================================
+  function doLogout() {
+    localStorage.removeItem('sebrosur_provider');
+    PROVIDER    = null;
+    PROVIDER_ID = '';
+    showLoginScreen();
+  }
+
+  // =============================================
+  // UTILS
+  // =============================================
+  function fetchPost(data) {
+    return fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'text/plain' }
+    }).then(function(r) { return r.json(); });
+  }
+
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 3500);
+  }
+
+  function esc(str) {
+    return String(str || '')
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // SERVICE WORKER
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/sebrosur/sw-provider.js')
+        .then(function(r) { console.log('SW provider:', r.scope); })
+        .catch(function(e) { console.log('SW error:', e); });
+    });
+  }
+</script>
+</body>
+</html>
