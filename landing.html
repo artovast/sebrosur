@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>seBrosur — Distribusi Brosur Digital via Jaringan Ojek Online</title>
+<meta name="description" content="seBrosur mengubah setiap perjalanan ojol menjadi peluang promosi. Advertiser pasang iklan tepat sasaran, Driver ojol dapat penghasilan tambahan.">
+
+<!-- Open Graph -->
+<meta property="og:title" content="seBrosur — Brosur Digital via Jaringan Ojol">
+<meta property="og:description" content="Lapisan ekonomi baru di atas jaringan ojol. Promosi tepat sasaran untuk bisnis, penghasilan tambahan untuk driver.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sebrosur.id">
+<meta property="og:image" content="https://sebrosur.id/og-image.png">
+<meta property="og:locale" content="id_ID">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="seBrosur — Brosur Digital via Jaringan Ojol">
+<meta name="twitter:description" content="Lapisan ekonomi baru di atas jaringan ojol. Promosi tepat sasaran untuk bisnis, penghasilan tambahan untuk driver.">
+
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: #1a1a2e; background: #fff; line-height: 1.6; overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+img { max-width: 100%; display: block; }
+
+/* ===== CSS VARIABLES ===== */
+:root {
+  --green: #1D9E75;
+  --green-dark: #0F6E56;
+  --green-light: #E1F5EE;
+  --green-lighter: #f0faf5;
+  --text: #1a1a2e;
+  --text-light: #555;
+  --white: #ffffff;
+  --shadow: 0 2px 20px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.10);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --max-w: 1120px;
+  --transition: 0.3s ease;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* ===== UTILITY ===== */
+.container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+.section-pad { padding: 80px 0; }
+.text-center { text-align: center; }
+.section-label {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--green);
+  margin-bottom: 12px;
+}
+.section-title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+.section-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-light);
+  max-width: 600px;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition);
+  text-align: center;
+  justify-content: center;
+}
+.btn-primary {
+  background: var(--green);
+  color: var(--white);
+  box-shadow: 0 4px 15px rgba(29,158,117,0.3);
+}
+.btn-primary:hover {
+  background: var(--green-dark);
+  box-shadow: 0 6px 25px rgba(29,158,117,0.4);
+  transform: translateY(-2px);
+}
+.btn-secondary {
+  background: var(--white);
+  color: var(--green);
+  border: 2px solid var(--green);
+}
+.btn-secondary:hover {
+  background: var(--green-light);
+  transform: translateY(-2px);
+}
+.btn-wa {
+  background: #25D366;
+  color: var(--white);
+}
+.btn-wa:hover {
+  background: #1fb855;
+  transform: translateY(-2px);
+}
+.btn-group {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  transition: all var(--transition);
+}
+.navbar.scrolled {
+  box-shadow: var(--shadow);
+}
+.nav-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+.nav-logo {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--green);
+  letter-spacing: -0.5px;
+}
+.nav-logo span { color: var(--text); }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.nav-links a {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-light);
+  transition: color var(--transition);
+  white-space: nowrap;
+}
+.nav-links a:hover { color: var(--green); }
+.nav-cta {
+  padding: 10px 22px !important;
+  font-size: 0.88rem !important;
+}
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+  background: none;
+  border: none;
+}
+.nav-toggle span {
+  display: block;
+  width: 24px;
+  height: 2.5px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: all var(--transition);
+}
+
+/* ===== HERO ===== */
+.hero {
+  padding: 140px 0 80px;
+  background: linear-gradient(160deg, var(--white) 0%, var(--green-lighter) 50%, var(--green-light) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(29,158,117,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -100px;
+  left: -100px;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(29,158,117,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-content {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--white);
+  border: 1px solid rgba(29,158,117,0.2);
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--green);
+  margin-bottom: 28px;
+  animation: fadeIn 0.8s ease;
+}
+.hero h1 {
+  font-size: clamp(2.2rem, 5.5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--text);
+  margin-bottom: 20px;
+  animation: fadeUp 0.8s ease;
+}
+.hero h1 .accent { color: var(--green); }
+.hero p {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--text-light);
+  margin-bottom: 36px;
+  line-height: 1.7;
+  animation: fadeUp 0.8s ease 0.1s both;
+}
+.hero .btn-group { animation: fadeUp 0.8s ease 0.2s both; }
+.hero-visual {
+  margin-top: 60px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  animation: fadeUp 0.8s ease 0.3s both;
+}
+.hero-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow-lg);
+  max-width: 280px;
+  text-align: left;
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.hero-card-icon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+  animation: float 3s ease-in-out infinite;
+}
+.hero-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+.hero-card p { font-size: 0.85rem; color: var(--text-light); line-height: 1.5; }
+
+/* ===== HOW IT WORKS ===== */
+.how-it-works { background: var(--white); }
+.tab-switcher {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  background: var(--green-light);
+  border-radius: 50px;
+  padding: 4px;
+  max-width: 380px;
+  margin: 0 auto 48px;
+}
+.tab-btn {
+  flex: 1;
+  padding: 12px 24px;
+  border: none;
+  background: transparent;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-light);
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.tab-btn.active {
+  background: var(--green);
+  color: var(--white);
+  box-shadow: 0 2px 8px rgba(29,158,117,0.3);
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeIn 0.4s ease; }
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.step {
+  text-align: center;
+  padding: 32px 24px;
+  border-radius: var(--radius);
+  background: var(--green-lighter);
+  position: relative;
+  transition: transform var(--transition);
+}
+.step:hover { transform: translateY(-4px); }
+.step-num {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--green);
+  color: var(--white);
+  font-weight: 800;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+.step-icon { font-size: 2.2rem; margin-bottom: 12px; }
+.step h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+.step p { font-size: 0.9rem; color: var(--text-light); line-height: 1.6; }
+
+/* ===== BENEFITS ===== */
+.benefits-adv { background: var(--green-lighter); }
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.benefit-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(0,0,0,0.04);
+  transition: all var(--transition);
+}
+.benefit-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+.benefit-icon {
+  font-size: 2rem;
+  margin-bottom: 16px;
+  display: inline-block;
+}
+.benefit-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+.benefit-card p { font-size: 0.92rem; color: var(--text-light); line-height: 1.6; }
+
+.benefits-driver { background: var(--white); }
+
+/* ===== STATS ===== */
+.stats {
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+.stats::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  pointer-events: none;
+}
+.stats .section-label { color: rgba(255,255,255,0.7); }
+.stats .section-title { color: var(--white); }
+.stats .section-subtitle { color: rgba(255,255,255,0.8); }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 32px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.stat-item { text-align: center; }
+.stat-num {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-label {
+  font-size: 0.95rem;
+  opacity: 0.85;
+  font-weight: 500;
+}
+
+/* ===== FAQ ===== */
+.faq { background: var(--green-lighter); }
+.faq-list {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.faq-item {
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1px solid rgba(0,0,0,0.06);
+  overflow: hidden;
+  transition: box-shadow var(--transition);
+}
+.faq-item:hover { box-shadow: var(--shadow); }
+.faq-question {
+  width: 100%;
+  padding: 20px 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: left;
+  font-family: inherit;
+  transition: color var(--transition);
+}
+.faq-question:hover { color: var(--green); }
+.faq-arrow {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: transform var(--transition);
+  color: var(--green);
+}
+.faq-item.active .faq-arrow { transform: rotate(180deg); }
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+}
+.faq-answer-inner {
+  padding: 0 24px 20px;
+  font-size: 0.95rem;
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+/* ===== FINAL CTA ===== */
+.final-cta {
+  background: var(--white);
+  text-align: center;
+}
+.final-cta-box {
+  background: linear-gradient(135deg, var(--green-light) 0%, var(--white) 100%);
+  border-radius: 20px;
+  padding: 60px 40px;
+  border: 1px solid rgba(29,158,117,0.15);
+}
+.wa-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  font-size: 0.95rem;
+  color: var(--text-light);
+  transition: color var(--transition);
+}
+.wa-link:hover { color: var(--green); }
+
+/* ===== FOOTER ===== */
+.footer {
+  background: var(--text);
+  color: rgba(255,255,255,0.6);
+  padding: 32px 0;
+  text-align: center;
+  font-size: 0.88rem;
+}
+.footer a {
+  color: rgba(255,255,255,0.8);
+  transition: color var(--transition);
+}
+.footer a:hover { color: var(--green); }
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+  .section-pad { padding: 56px 0; }
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    padding: 24px;
+    gap: 20px;
+    box-shadow: var(--shadow-lg);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    animation: fadeIn 0.3s ease;
+  }
+  .nav-toggle { display: flex; }
+  .hero { padding: 110px 0 56px; }
+  .hero-visual { flex-direction: column; align-items: center; }
+  .hero-card { max-width: 100%; }
+  .steps { grid-template-columns: 1fr; max-width: 400px; }
+  .benefits-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .btn-group { flex-direction: column; align-items: center; }
+  .btn { width: 100%; max-width: 320px; }
+  .final-cta-box { padding: 40px 24px; }
+  .tab-switcher { max-width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">se<span>Brosur</span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="#cara-kerja">Cara Kerja</a>
+      <a href="#keuntungan-advertiser">Advertiser</a>
+      <a href="#keuntungan-advisor">Advisor</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://s.id/regadvert" class="btn btn-primary nav-cta" target="_blank">Mulai Sekarang</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">🚀 Ekosistem Sebarin</div>
+      <h1>Setiap Perjalanan Ojol, <span class="accent">Peluang Promosi Baru</span></h1>
+      <p>seBrosur menghubungkan bisnis dengan jutaan penumpang ojol lewat driver yang sudah di lapangan. Iklan sampai ke orang yang tepat, di momen yang tepat — tanpa biaya per tayang.</p>
+      <div class="btn-group">
+        <a href="https://s.id/regadvert" class="btn btn-primary" target="_blank">📢 Daftar Advertiser</a>
+        <a href="https://s.id/regadvis" class="btn btn-secondary" target="_blank">🏍️ Daftar Advisor</a>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-card">
+          <div class="hero-card-icon">📢</div>
+          <h3>Untuk Bisnis</h3>
+          <p>Pasang brosur digital, tentukan komisi sendiri, bayar hanya untuk hasil nyata.</p>
+        </div>
+        <div class="hero-card">
+          <div class="hero-card-icon">🏍️</div>
+          <h3>Untuk Driver</h3>
+          <p>Bagikan brosur ke penumpang, dapatkan komisi langsung ke e-wallet kamu.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="how-it-works section-pad" id="cara-kerja">
+  <div class="container text-center">
+    <span class="section-label reveal">Cara Kerja</span>
+    <h2 class="section-title reveal">Simpel. Efektif. Tiga Langkah.</h2>
+    <p class="section-subtitle reveal">Pilih peranmu dan mulai dalam hitungan menit.</p>
+
+    <div class="tab-switcher reveal">
+      <button class="tab-btn active" data-tab="advertiser-steps">📢 Advertiser</button>
+      <button class="tab-btn" data-tab="advisor-steps">🏍️ Advisor</button>
+    </div>
+
+    <div class="tab-content active" id="advertiser-steps">
+      <div class="steps">
+        <div class="step reveal reveal-delay-1">
+          <div class="step-icon">📝</div>
+          <div class="step-num">1</div>
+          <h3>Buat Brosur Digital</h3>
+          <p>Daftar, upload materi promosi kamu, dan tentukan target area serta budget komisi.</p>
+        </div>
+        <div class="step reveal reveal-delay-2">
+          <div class="step-icon">📡</div>
+          <div class="step-num">2</div>
+          <h3>Driver Sebarkan</h3>
+          <p>Advisor (driver ojol) membagikan brosur ke penumpang yang relevan di perjalanan mereka.</p>
+        </div>
+        <div class="step reveal reveal-delay-3">
+          <div class="step-icon">📊</div>
+          <div class="step-num">3</div>
+          <h3>Pantau & Bayar Hasil</h3>
+          <p>Lihat laporan real-time. Bayar hanya untuk lead atau closing yang benar-benar terjadi.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="advisor-steps">
+      <div class="steps">
+        <div class="step reveal reveal-delay-1">
+          <div class="step-icon">✅</div>
+          <div class="step-num">1</div>
+          <h3>Daftar Gratis</h3>
+          <p>Registrasi jadi Advisor seBrosur. Tidak ada biaya, tidak ada syarat ribet.</p>
+        </div>
+        <div class="step reveal reveal-delay-2">
+          <div class="step-icon">🤝</div>
+          <div class="step-num">2</div>
+          <h3>Bagikan ke Penumpang</h3>
+          <p>Pilih brosur yang cocok, bagikan secara natural saat antar-jemput penumpang.</p>
+        </div>
+        <div class="step reveal reveal-delay-3">
+          <div class="step-icon">💰</div>
+          <div class="step-num">3</div>
+          <h3>Terima Komisi</h3>
+          <p>Setiap distribusi, lead, atau closing menghasilkan komisi langsung ke e-wallet kamu.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== KEUNTUNGAN ADVERTISER ===== -->
+<section class="benefits-adv section-pad" id="keuntungan-advertiser">
+  <div class="container text-center">
+    <span class="section-label reveal">Untuk Advertiser</span>
+    <h2 class="section-title reveal">Iklan yang Sampai, Bukan Sekadar Tayang</h2>
+    <p class="section-subtitle reveal">Penumpang ojol adalah audiens "captive" — mereka punya waktu, perhatian, dan konteks lokasi yang tepat.</p>
+
+    <div class="benefits-grid">
+      <div class="benefit-card reveal reveal-delay-1">
+        <div class="benefit-icon">🎯</div>
+        <h3>Targeting Kontekstual</h3>
+        <p>Brosur disebarkan berdasarkan lokasi, waktu, dan situasi nyata di lapangan — bukan sekadar algoritma digital.</p>
+      </div>
+      <div class="benefit-card reveal reveal-delay-2">
+        <div class="benefit-icon">💸</div>
+        <h3>Bayar per Hasil</h3>
+        <p>Tidak ada biaya per tayang. Kamu tentukan sendiri komisi per lead atau closing. Budget 100% untuk konversi.</p>
+      </div>
+      <div class="benefit-card reveal reveal-delay-3">
+        <div class="benefit-icon">📈</div>
+        <h3>ROI Terukur</h3>
+        <p>Dashboard real-time menampilkan distribusi, lead masuk, dan closing. Setiap rupiah terukur hasilnya.</p>
+      </div>
+      <div class="benefit-card reveal reveal-delay-1">
+        <div class="benefit-icon">🗺️</div>
+        <h3>Jangkauan Luas</h3>
+        <p>Manfaatkan jaringan ribuan driver ojol yang sudah menjangkau seluruh kota-kota besar Indonesia.</p>
+      </div>
+      <div class="benefit-card reveal reveal-delay-2">
+        <div class="benefit-icon">🤖</div>
+        <h3>Cocok untuk UMKM</h3>
+        <p>Tidak perlu budget besar. Deposit sesuai kemampuan, atur komisi sendiri, stop kapan saja.</p>
+      </div>
+      <div class="benefit-card reveal reveal-delay-3">
+        <div class="benefit-icon">⚡</div>
+        <h3>Setup Cepat</h3>
+        <p>Buat kampanye dalam 5 menit. Brosur langsung tersedia untuk ribuan Advisor di area targetmu.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== KEUNTUNGAN ADVISOR ===== -->
+<section class="benefits-driver section-pad" id="keuntungan-advisor">
+  <div class="container text-center">
+    <span class="section-label reveal">Untuk Advisor (Driver Ojol)</span>
+    <h2 class="section-title reveal">Jalan Biasa, Penghasilan Luar Biasa</h2>
+    <p class="section-subtitle reveal">Kamu sudah di jalan setiap hari. Sekarang setiap perjalanan bisa menghasilkan lebih.</p>
+
+    <div class="benefits-grid">
+      <div class="benefit-card reveal reveal-delay-1">
+        <div class="benefit-icon">🆓</div>
+        <h3>Tanpa Modal</h3>
+        <p>Daftar gratis, langsung dapat akses ke brosur digital. Tidak ada biaya, tidak ada target yang memberatkan.</p>
+      </div>
+      <div class="benefit-card reveal reveal-delay-2">
+        <div class="benefit-icon">💰</div>
+        <h3>Komisi Langsung</h3>
+        <p>Setiap brosur yang kamu bagikan berpotensi menghasilkan komisi. Dana masuk langsung ke e-wallet favoritmu.</p>
+      </div>
+      <div class="benefit-card reveal reveal-delay-3">
+        <div class="benefit-icon">🔄</div>
+        <h3>Dari Perjalanan Rutin</h3>
+        <p>Tidak perlu usaha ekstra. Bagikan brosur secara natural saat kamu antar-jemput penumpang seperti biasa.</p>
+      </div>
+      <div class="benefit-card reveal reveal-delay-1">
+        <div class="benefit-icon">📱</div>
+        <h3>Semua via HP</h3>
+        <p>Pilih brosur, bagikan ke penumpang, dan pantau penghasilan — semua dari smartphone yang sudah kamu pegang.</p>
+      </div>
+      <div class="benefit-card reveal reveal-delay-2">
+        <div class="benefit-icon">🏆</div>
+        <h3>Bonus & Reward</h3>
+        <p>Advisor aktif dengan performa baik mendapat bonus ekstra dan akses ke brosur dengan komisi lebih tinggi.</p>
+      </div>
+      <div class="benefit-card reveal reveal-delay-3">
+        <div class="benefit-icon">🛡️</div>
+        <h3>Aman & Transparan</h3>
+        <p>Semua transaksi tercatat. Kamu bisa lihat status distribusi, lead, dan komisi kapan saja di dashboard.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="stats section-pad" id="stats">
+  <div class="container text-center">
+    <span class="section-label reveal">Bergabung Sekarang</span>
+    <h2 class="section-title reveal">Jaringan yang Terus Bertumbuh</h2>
+    <p class="section-subtitle reveal">Bergabung bersama ribuan Advisor aktif di kota-kota besar Indonesia.</p>
+
+    <div class="stats-grid">
+      <div class="stat-item reveal reveal-delay-1">
+        <div class="stat-num">4,200+</div>
+        <div class="stat-label">Advisor Aktif</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-2">
+        <div class="stat-num">380+</div>
+        <div class="stat-label">Brand & UMKM</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-3">
+        <div class="stat-num">15</div>
+        <div class="stat-label">Kota Tercakup</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-1">
+        <div class="stat-num">92%</div>
+        <div class="stat-label">Tingkat Kepuasan</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq section-pad" id="faq">
+  <div class="container text-center">
+    <span class="section-label reveal">FAQ</span>
+    <h2 class="section-title reveal">Pertanyaan yang Sering Ditanyakan</h2>
+    <p class="section-subtitle reveal">Belum menemukan jawaban? Langsung tanya lewat WhatsApp.</p>
+
+    <div class="faq-list">
+      <div class="faq-item reveal reveal-delay-1">
+        <button class="faq-question">
+          <span>Apa itu seBrosur dan bagaimana cara kerjanya?</span>
+          <span class="faq-arrow">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            seBrosur adalah platform distribusi brosur digital yang memanfaatkan jaringan driver ojol (disebut Advisor). Advertiser membuat brosur digital dan menentukan komisi. Advisor menyebarkan brosur ke penumpang saat perjalanan. Advertiser membayar berdasarkan hasil nyata (lead/closing), bukan per tayang.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item reveal reveal-delay-2">
+        <button class="faq-question">
+          <span>Berapa biaya untuk mulai beriklan di seBrosur?</span>
+          <span class="faq-arrow">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Tidak ada biaya tetap atau langganan. Kamu cukup deposit dana sesuai budget, lalu tentukan sendiri komisi per distribusi, lead, atau closing. Mulai dari Rp 100.000 sudah bisa menjalankan kampanye pertamamu. Budget 100% digunakan untuk komisi yang menghasilkan.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item reveal reveal-delay-3">
+        <button class="faq-question">
+          <span>Bagaimana cara bergabung sebagai Advisor (driver)?</span>
+          <span class="faq-arrow">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Sangat mudah! Kamu cukup daftar gratis di platform kami, verifikasi sebagai driver aktif, dan langsung bisa mulai memilih serta menyebarkan brosur digital. Tidak ada modal, tidak ada biaya pendaftaran. Komisi langsung masuk ke e-wallet setelah distribusi terverifikasi.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item reveal reveal-delay-1">
+        <button class="faq-question">
+          <span>Kapan komisi Advisor dibayarkan?</span>
+          <span class="faq-arrow">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Komisi distribusi dikreditkan secara instan ke saldo seBrosur kamu. Untuk komisi lead dan closing, dana masuk setelah verifikasi (biasanya 1-3 hari kerja). Pencairan ke e-wallet (GoPay, OVO, DANA, ShopeePay) bisa dilakukan kapan saja tanpa minimum jumlah.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item reveal reveal-delay-2">
+        <button class="faq-question">
+          <span>Apakah penumpang tidak terganggu dengan brosur?</span>
+          <span class="faq-arrow">▾</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Justru sebaliknya. Advisor kami terlatih untuk membagikan brosur secara natural dan kontekstual — hanya saat relevan dan situasi memungkinkan. Brosur digital juga tidak meninggalkan sampah fisik. Penumpang bebas menerima atau menolak, tanpa tekanan apapun.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FINAL CTA ===== -->
+<section class="final-cta section-pad" id="daftar">
+  <div class="container">
+    <div class="final-cta-box reveal">
+      <span class="section-label">Siap Mulai?</span>
+      <h2 class="section-title">Gabung seBrosur Hari Ini</h2>
+      <p class="section-subtitle">Baik kamu punya bisnis yang mau dipromosikan, atau driver yang mau tambah penghasilan — seBrosur punya tempat untukmu.</p>
+      <div class="btn-group">
+        <a href="https://s.id/regadvert" class="btn btn-primary" target="_blank">📢 Daftar Advertiser</a>
+        <a href="https://s.id/regadvis" class="btn btn-secondary" target="_blank">🏍️ Daftar Advisor</a>
+      </div>
+      <a href="https://wa.me/6285177459798" class="wa-link" target="_blank">
+        💬 Ada pertanyaan? Chat kami di WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-links">
+      <a href="#cara-kerja">Cara Kerja</a>
+      <a href="#keuntungan-advertiser">Advertiser</a>
+      <a href="#keuntungan-advisor">Advisor</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://wa.me/6285177459798" target="_blank">WhatsApp</a>
+    </div>
+    <p>&copy; 2026 seBrosur &middot; Bagian dari ekosistem <strong>Sebarin</strong></p>
+  </div>
+</footer>
+
+<script>
+/* ===== Scroll Reveal ===== */
+(function() {
+  var reveals = document.querySelectorAll('.reveal');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(function(el) { observer.observe(el); });
+})();
+
+/* ===== Navbar scroll effect ===== */
+(function() {
+  var navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', function() {
+    navbar.classList.toggle('scrolled', window.scrollY > 10);
+  });
+})();
+
+/* ===== Mobile nav toggle ===== */
+(function() {
+  var toggle = document.getElementById('navToggle');
+  var links = document.getElementById('navLinks');
+  toggle.addEventListener('click', function() {
+    links.classList.toggle('open');
+    var spans = toggle.querySelectorAll('span');
+    if (links.classList.contains('open')) {
+      spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+      spans[1].style.opacity = '0';
+      spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+    } else {
+      spans[0].style.transform = '';
+      spans[1].style.opacity = '';
+      spans[2].style.transform = '';
+    }
+  });
+  // Close menu on link click
+  links.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      links.classList.remove('open');
+      var spans = toggle.querySelectorAll('span');
+      spans[0].style.transform = '';
+      spans[1].style.opacity = '';
+      spans[2].style.transform = '';
+    });
+  });
+})();
+
+/* ===== Tab Switcher ===== */
+(function() {
+  var tabs = document.querySelectorAll('.tab-btn');
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      tabs.forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      document.querySelectorAll('.tab-content').forEach(function(c) {
+        c.classList.remove('active');
+      });
+      var target = document.getElementById(tab.getAttribute('data-tab'));
+      if (target) {
+        target.classList.add('active');
+        // Re-trigger reveal for newly visible steps
+        target.querySelectorAll('.reveal').forEach(function(el) {
+          el.classList.remove('visible');
+          setTimeout(function() { el.classList.add('visible'); }, 50);
+        });
+      }
+    });
+  });
+})();
+
+/* ===== FAQ Accordion ===== */
+(function() {
+  var questions = document.querySelectorAll('.faq-question');
+  questions.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var item = btn.parentElement;
+      var answer = item.querySelector('.faq-answer');
+      var isOpen = item.classList.contains('active');
+
+      // Close all first
+      document.querySelectorAll('.faq-item').forEach(function(fi) {
+        fi.classList.remove('active');
+        fi.querySelector('.faq-answer').style.maxHeight = '0';
+      });
+
+      // Open clicked if it was closed
+      if (!isOpen) {
+        item.classList.add('active');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+      }
+    });
+  });
+})();
+
+/* ===== Smooth scroll for anchor links ===== */
+(function() {
+  document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      var target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        var offset = 72; // navbar height
+        var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
