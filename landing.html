@@ -551,6 +551,162 @@ img { max-width: 100%; display: block; }
   flex-wrap: wrap;
 }
 
+
+/* ===== APP PREVIEW SECTION ===== */
+.app-preview { background: var(--green-lighter); }
+.app-preview-illustration {
+  display: block;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto 48px;
+  border-radius: 16px;
+  object-fit: cover;
+}
+.app-preview-mockups {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.app-preview-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.app-preview-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+}
+/* --- Phone shell --- */
+.phone-mockup {
+  width: 260px;
+  height: 460px;
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.13), 0 0 0 2px rgba(0,0,0,0.06);
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 11px;
+  color: #222;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.phone-mockup * { box-sizing: border-box; }
+
+/* Notch */
+.phone-notch {
+  width: 80px; height: 6px; background: #222; border-radius: 0 0 8px 8px;
+  margin: 0 auto; position: relative; z-index: 2;
+}
+
+/* -- Driver mockup parts -- */
+.pm-topbar {
+  background: var(--green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 8px;
+  font-weight: 700;
+  font-size: 11.5px;
+}
+.pm-topbar-right { font-weight: 400; font-size: 9.5px; opacity: .85; }
+.pm-body { flex: 1; padding: 10px 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #f7faf9; }
+.pm-greeting { font-size: 12px; font-weight: 600; color: #333; }
+.pm-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.pm-chip {
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-size: 10px;
+  font-weight: 600;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #555;
+}
+.pm-chip.active { background: var(--green); color: #fff; border-color: var(--green); }
+
+.pm-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.pm-card-title { font-size: 12px; font-weight: 700; color: #1a1a2e; }
+.pm-card-desc { font-size: 10px; color: #666; line-height: 1.4; }
+.pm-card-meta { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-top: 2px; }
+.pm-tag {
+  display: inline-block;
+  padding: 2px 7px;
+  background: var(--green-light);
+  color: var(--green-dark);
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 600;
+}
+.pm-fee { font-size: 10px; color: var(--green-dark); font-weight: 700; }
+.pm-btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 7px 0;
+  background: var(--green);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 4px;
+  border: none;
+}
+.pm-bottom {
+  background: #fff;
+  border-top: 1px solid #eee;
+  padding: 9px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  color: #555;
+  font-weight: 600;
+}
+.pm-bottom-link { color: var(--green); font-weight: 700; font-size: 10px; }
+
+/* -- Advertiser mockup parts -- */
+.pm-saldo-card {
+  background: var(--green-dark);
+  color: #fff;
+  border-radius: 10px;
+  padding: 12px;
+}
+.pm-saldo-title { font-size: 10px; opacity: .75; margin-bottom: 2px; }
+.pm-saldo-amount { font-size: 16px; font-weight: 800; }
+.pm-saldo-sub { font-size: 9px; opacity: .65; margin-top: 4px; }
+.pm-stats-row { display: flex; gap: 6px; }
+.pm-stat-box {
+  flex: 1;
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px 6px;
+  text-align: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.pm-stat-num { font-size: 15px; font-weight: 800; color: var(--green); }
+.pm-stat-label { font-size: 8.5px; color: #888; margin-top: 1px; }
+.pm-card-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  background: var(--green);
+  color: #fff;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 700;
+}
+
 /* ===== MOBILE ===== */
 @media (max-width: 768px) {
   .section-pad { padding: 56px 0; }
@@ -581,6 +737,8 @@ img { max-width: 100%; display: block; }
   .final-cta-box { padding: 40px 24px; }
   .tab-switcher { max-width: 100%; }
 }
+
+  .app-preview-mockups { flex-direction: column; align-items: center; gap: 32px; }
 
 @media (max-width: 480px) {
   .stats-grid { grid-template-columns: 1fr; }
@@ -687,6 +845,102 @@ img { max-width: 100%; display: block; }
           <div class="step-num">3</div>
           <h3>Terima Komisi</h3>
           <p>Setiap distribusi, lead, atau closing menghasilkan komisi langsung ke e-wallet kamu.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== APP PREVIEW ===== -->
+<section class="app-preview section-pad" id="app-preview">
+  <div class="container text-center">
+    <span class="section-label reveal">Preview Aplikasi</span>
+    <h2 class="section-title reveal">Lihat langsung, sesederhana itu</h2>
+    <p class="section-subtitle reveal">Begini tampilan seBrosur untuk Advisor dan Advertiser — simpel, langsung paham.</p>
+
+    <img
+      src="https://static.prod-images.emergentagent.com/jobs/e261c166-86aa-4048-844e-4f2b50805772/images/ad332ac3809d44ef4610cfb3467b91a6fab66878b91d4c232e728b77f9ae3957.jpeg"
+      alt="Ilustrasi driver seBrosur"
+      class="app-preview-illustration reveal"
+      loading="lazy"
+    >
+
+    <div class="app-preview-mockups">
+      <!-- ===== Tampilan Advisor (Driver) ===== -->
+      <div class="app-preview-col reveal reveal-delay-1">
+        <span class="app-preview-label">Tampilan Advisor</span>
+        <div class="phone-mockup">
+          <div class="phone-notch"></div>
+          <div class="pm-topbar">
+            <span>SeBrosur</span>
+            <span class="pm-topbar-right">Budi S. &middot; DRIV-012</span>
+          </div>
+          <div class="pm-body">
+            <div class="pm-greeting">Halo Budi, pilih brosur yang cocok hari ini.</div>
+            <div class="pm-chips">
+              <span class="pm-chip active">Semua</span>
+              <span class="pm-chip">Keamanan</span>
+              <span class="pm-chip">Properti</span>
+            </div>
+            <div class="pm-card">
+              <div class="pm-card-title">Pasang CCTV Paket Rumah</div>
+              <div class="pm-card-desc">Paket lengkap 4 kamera + instalasi. Garansi 2 tahun, bisa pantau via HP.</div>
+              <div class="pm-card-meta">
+                <span class="pm-tag">Keamanan</span>
+                <span class="pm-fee">Fee closing Rp 15.000</span>
+              </div>
+              <div class="pm-btn">Ambil brosur</div>
+            </div>
+          </div>
+          <div class="pm-bottom">
+            <span>E-brosur saya</span>
+            <span class="pm-bottom-link">Buka folder Drive &rarr;</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Tampilan Advertiser ===== -->
+      <div class="app-preview-col reveal reveal-delay-2">
+        <span class="app-preview-label">Tampilan Advertiser</span>
+        <div class="phone-mockup">
+          <div class="phone-notch"></div>
+          <div class="pm-topbar">
+            <span>SeBrosur</span>
+            <span class="pm-topbar-right">Portal Advertiser</span>
+          </div>
+          <div class="pm-body">
+            <div class="pm-saldo-card">
+              <div class="pm-saldo-title">Saldo aktif</div>
+              <div class="pm-saldo-amount">Rp 2.450.000</div>
+              <div class="pm-saldo-sub">Total topup Rp 3.000.000 &middot; Terpakai Rp 550.000</div>
+            </div>
+            <div class="pm-stats-row">
+              <div class="pm-stat-box">
+                <div class="pm-stat-num">127</div>
+                <div class="pm-stat-label">Distribusi</div>
+              </div>
+              <div class="pm-stat-box">
+                <div class="pm-stat-num">43</div>
+                <div class="pm-stat-label">Lead</div>
+              </div>
+              <div class="pm-stat-box">
+                <div class="pm-stat-num">8</div>
+                <div class="pm-stat-label">Closing</div>
+              </div>
+            </div>
+            <div class="pm-card">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div class="pm-card-title">Pasang CCTV Paket Rumah</div>
+                <span class="pm-card-badge">Aktif</span>
+              </div>
+              <div class="pm-card-desc">Paket lengkap 4 kamera + instalasi. Garansi 2 tahun, bisa pantau via HP.</div>
+              <div class="pm-card-meta">
+                <span class="pm-tag">Keamanan</span>
+                <span class="pm-fee">Fee Rp 15.000/closing</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
